@@ -2,23 +2,27 @@
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
+    IdentityModel.OidcClient.OidcClient client;
 
 	public MainPage()
 	{
 		InitializeComponent();
-	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
+        client = new IdentityModel.OidcClient.OidcClient(new IdentityModel.OidcClient.OidcClientOptions()
+        {
+            Authority = "https://domain.auth0.com",
+            ClientId = "client_id",
+            Browser = new WebViewBrowser(WebViewInstance),
+            RedirectUri = "http://localhost/callback",
+			Scope = "openid profile email",
+        });
+    }
+
+	private async void OnLoginClicked(object sender, EventArgs e)
 	{
-		count++;
-
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
-
-		SemanticScreenReader.Announce(CounterBtn.Text);
+		var result = await client.LoginAsync();
+		
+		IdToken.Text = $"Id Token {result.TokenResponse.IdentityToken}";
 	}
 }
 
