@@ -12,8 +12,8 @@ public partial class MainPage : ContentPage
         {
             Authority = "https://domain.auth0.com",
             ClientId = "client_id",
-            Browser = new WebViewBrowser(WebViewInstance),
-            RedirectUri = "http://localhost/callback",
+            Browser = new WebViewBrowser(),
+            RedirectUri = "myapp://callback",
 			Scope = "openid profile email",
         });
     }
