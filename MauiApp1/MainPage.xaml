@@ -16,8 +16,12 @@
                 Text="Login"
                 Clicked="OnLoginClicked"
                 HorizontalOptions="Center" />
-            
-            <WebView x:Name="WebViewInstance" />
+
+            <Button 
+                x:Name="LogoutBtn"
+                Text="Logout"
+                Clicked="OnLogoutClicked"
+                HorizontalOptions="Center" />
         </VerticalStackLayout>
     </ScrollView>
  

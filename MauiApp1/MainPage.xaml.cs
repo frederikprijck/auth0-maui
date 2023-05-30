@@ -2,27 +2,41 @@
 
 public partial class MainPage : ContentPage
 {
-    IdentityModel.OidcClient.OidcClient client;
+    Auth0Client client;
 
 	public MainPage()
 	{
 		InitializeComponent();
 
-        client = new IdentityModel.OidcClient.OidcClient(new IdentityModel.OidcClient.OidcClientOptions()
+        client = new Auth0Client(new IdentityModel.OidcClient.OidcClientOptions()
         {
-            Authority = "https://domain.auth0.com",
-            ClientId = "client_id",
-            Browser = new WebViewBrowser(),
+            Authority = "https://{AUTH0_DOMAIN}",
+            ClientId = "{AUTH0_CLIENT_ID}",
+            Browser = new WebAuthenticatorBrowser(),
             RedirectUri = "myapp://callback",
 			Scope = "openid profile email",
         });
+
+        LoginBtn.IsVisible = true;
+        LogoutBtn.IsVisible = false;
     }
 
-	private async void OnLoginClicked(object sender, EventArgs e)
-	{
-		var result = await client.LoginAsync();
-		
-		IdToken.Text = $"Id Token {result.TokenResponse.IdentityToken}";
-	}
+    private async void OnLoginClicked(object sender, EventArgs e)
+    {
+        var result = await client.LogInAsync();
+
+        IdToken.Text = $"Id Token {result.TokenResponse.IdentityToken}";
+        LoginBtn.IsVisible = false;
+        LogoutBtn.IsVisible = true;
+    }
+
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        await client.LogOut();
+
+        IdToken.Text = $"";
+        LoginBtn.IsVisible = true;
+        LogoutBtn.IsVisible = false;
+    }
 }
 
